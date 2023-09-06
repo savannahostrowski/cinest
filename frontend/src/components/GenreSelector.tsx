@@ -1,5 +1,5 @@
 import { createStyles, SegmentedControl, rem } from '@mantine/core';
-import React from 'react';
+import { send } from 'process';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -10,7 +10,7 @@ const useStyles = createStyles((theme) => ({
   },
 
   indicator: {
-    backgroundImage: theme.fn.gradient({ from: 'pink', to: 'orange' }),
+    backgroundImage: theme.fn.gradient({ from: 'violet', to: 'grape' }),
   },
 
   control: {
@@ -26,7 +26,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const GenreSelector = () => {
+const GenreSelector = ({setGenreOnPage}) => {
   const { classes } = useStyles();
   return (
     <SegmentedControl
@@ -35,6 +35,8 @@ const GenreSelector = () => {
       data={["Action", "Comedy", "Documentary", "Drama",
       "Fantasy", "Horror", "Science Fiction", "Thriller"]}
       classNames={classes}
+      color="violet"
+      onChange={(value) => setGenreOnPage(value)}
     />
   );
 }

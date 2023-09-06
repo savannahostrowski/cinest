@@ -1,6 +1,7 @@
 import './App.css'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import SubmitPage from './components/SubmitPage';
+import MoviePage from './components/MoviePage';
 
 function App() {
   return (
@@ -12,7 +13,5 @@ function App() {
     </Router>
   )
 }
-
-
 
 export default App
