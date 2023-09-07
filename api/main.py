@@ -1,11 +1,20 @@
 import json
 import os
 from fastapi import FastAPI, Depends
+from fastapi.middleware.cors import CORSMiddleware
 import openai
-from database import get_database, fetch_one
+from database import create_database, get_database
 from requests import get
 
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 MODEL = "gpt-4"
 OMDB_API_KEY = os.environ.get("OMDB_API_KEY")
@@ -14,8 +23,9 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 @app.on_event("startup")
 async def startup():
-    pass  # You could connect to a database here if you want a persistent connection.
-
+   # Create db if it doesn't exist
+   await create_database()
+       
 
 @app.on_event("shutdown")
 async def shutdown():
@@ -23,7 +33,7 @@ async def shutdown():
 
 
 # Get a random movie from the omdb database with a specific genre and store in the database
-@app.get("/random_movie/{genre}")
+@app.get("/api/random_movie/{genre}")
 async def random_movie(genre: str, conn=Depends(get_database)):
     response = openai.ChatCompletion.create(
         model=MODEL,
@@ -40,11 +50,11 @@ async def random_movie(genre: str, conn=Depends(get_database)):
     )
     movie = json.loads(response.choices[0].message.content)["movie"]
     # Search omdb database for the movie
-    print(OMDB_API_KEY)
     omdbData = get(
         f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&type=movie&t={movie}"
     ).json()
 
+    print(omdbData)
     # Store the movie in the database
     await conn.execute(
         "INSERT INTO movies (title, genre, year, plot, poster) VALUES ($1, $2, $3, $4, $5)",
@@ -54,5 +64,7 @@ async def random_movie(genre: str, conn=Depends(get_database)):
         omdbData["Plot"],
         omdbData["Poster"],
     )
+
+    
 
     return {"movie": omdbData}

@@ -6,17 +6,15 @@ import { useNavigate } from 'react-router-dom';
 
 const SubmitPage = () => {
   const [genre, setGenre] = useState('Action');
-  const [movie, setMovie] = useState<Movie>();
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
 
   const fetchMovie = async () => {
-    // setLoading(true)
+    setLoading(true)
 
     try {
-      console.log(process.env.REACT_APP_API_URL + '/random_movie/' + genre)
-      const response = await fetch(process.env.REACT_APP_API_URL + '/movie?genre=' + genre)
+      const response = await fetch(import.meta.env.VITE_API_URL + '/api/random_movie/' + genre)
       const data = await response.json()
       const m: Movie = {
         id: data.movie.imdbID,
@@ -29,10 +27,8 @@ const SubmitPage = () => {
         rating: data.movie.Ratings,
         cast: data.movie.Actors
       }
-      setMovie(m);
       setLoading(false);
-      console.log(movie);
-      // navigate('/movie/' + movie!.id, { state: { movie: movie } })
+      navigate('/movie/' + m!.id, { state: { movie: m } })
     }
     catch (error) {
       console.log(error);
