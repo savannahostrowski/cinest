@@ -1,15 +1,6 @@
 import os
 import asyncpg
 
-# create a database  where i acn make queries like   # Store the movie in the database
-    # await conn.execute(
-    #     "INSERT INTO movies (title, genre, year, plot, poster) VALUES ($1, $2, $3, $4, $5)",
-    #     omdbData["Title"],
-    #     omdbData["Genre"],
-    #     omdbData["Year"],
-    #     omdbData["Plot"],
-    #     omdbData["Poster"],
-    # )
 
 async def create_database():
     conn = await asyncpg.connect(
@@ -19,7 +10,7 @@ async def create_database():
         host=os.environ.get('POSTGRES_HOST'),
     )
     await conn.execute(
-        "CREATE TABLE IF NOT EXISTS movies (title TEXT, genre TEXT, year TEXT, plot TEXT, poster TEXT)"
+        "CREATE TABLE IF NOT EXISTS movies (id TEXT, title TEXT, genre TEXT, year TEXT, plot TEXT, poster TEXT)"
     )
     await conn.close()
 

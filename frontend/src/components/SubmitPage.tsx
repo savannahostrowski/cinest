@@ -41,7 +41,10 @@ const SubmitPage = () => {
 
   if (loading) {
     return (
-      <Loader color="violet" />
+      <div>
+        <h2>Lights, camera, action!</h2>
+        <Loader color="violet" />
+      </div>
     )
   }
 
@@ -53,7 +56,7 @@ const SubmitPage = () => {
       <GenreSelector setGenreOnPage={handleGenreChange} />
 
       <div>
-        <button onClick={fetchMovie}>Roll the clip!</button>
+        <button onClick={fetchMovie} style={{ marginTop: '10px' }}>Roll the clip!</button>
       </div>
     </>
   )

@@ -23,24 +23,35 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 @app.on_event("startup")
 async def startup():
-   # Create db if it doesn't exist
-   await create_database()
+    await create_database()
+   
        
 
 @app.on_event("shutdown")
 async def shutdown():
-    pass  # You could close database connections here.
+    await app.state._db.close()
 
 
 # Get a random movie from the omdb database with a specific genre and store in the database
 @app.get("/api/random_movie/{genre}")
 async def random_movie(genre: str, conn=Depends(get_database)):
+    ## Get last 10 movies from the database for this genre
+    movies = await conn.fetch(
+        "SELECT * FROM movies WHERE genre = $1 ORDER BY id DESC LIMIT 10", genre
+    )
+    movieTitles = [mov["title"] for mov in movies]
+
     response = openai.ChatCompletion.create(
         model=MODEL,
         messages=[
             {
                 "role": "system",
                 "content": "You are a movie suggestion engine. You are given a genre and you have to suggest a movie to the user. You will respond with a JSON object with a single field of 'movie' and the value of the movie you suggest.",
+            },
+            {
+                "role": "system",
+                "content": "Do not suggest a movie that has already been suggested. These movies have already been suggested: " + ", ".join(movieTitles),
+
             },
             {
                 "role": "user",
@@ -54,10 +65,10 @@ async def random_movie(genre: str, conn=Depends(get_database)):
         f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&type=movie&t={movie}"
     ).json()
 
-    print(omdbData)
     # Store the movie in the database
     await conn.execute(
-        "INSERT INTO movies (title, genre, year, plot, poster) VALUES ($1, $2, $3, $4, $5)",
+        "INSERT INTO movies (id, title, genre, year, plot, poster) VALUES ($1, $2, $3, $4, $5, $6)",
+        omdbData["imdbID"],
         omdbData["Title"],
         omdbData["Genre"],
         omdbData["Year"],
@@ -65,6 +76,5 @@ async def random_movie(genre: str, conn=Depends(get_database)):
         omdbData["Poster"],
     )
 
-    
 
     return {"movie": omdbData}
