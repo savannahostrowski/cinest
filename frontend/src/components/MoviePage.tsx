@@ -11,8 +11,6 @@ const MoviePage = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
-    localStorage.setItem('lastGenre', genre);
-
     const fetchMovie = async () => {
         setLoading(true)
 
