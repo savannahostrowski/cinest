@@ -27,7 +27,7 @@ To try it out, checkout the `not-azdified` branch and run `azd init` in the dire
 1. Postgres DB is not automatically detected so you need to add it manually during the init flow
 1. Port is configured to 8080 in the `frontend.bicep`, you will need to update to 5173 for Vite
 1. Error on backend container in log stream (connection refused by asyncpg) --> update env variables in `api.bicep` to match what I'm looking for in my app for the DB
-1. Error on fronend container in log stream (Oryx workspace/ not found in the container) --> add a start script in `package.json` to run `npm run dev -- --host`
+1. Error on fronend container in log stream (Oryx workspace/ not found in the container) --> add a start script in `package.json` to run `npm run dev -- --host` (this feels hacky and probably suboptimal??)
 1. Need to reference the API keys for OMDb and OpenAI:
     - Copy the contents of your `.env` into the `.azure/<env name>/.env` file
     - Add them to `main.parameters.json` 
