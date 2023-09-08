@@ -1,6 +1,6 @@
 # Cinest 🎥
 
-A movie suggestion engine, build with love and Azure! This is a demo application for showcasing the new `azd init` flow!
+A movie suggestion engine, built with love and Azure! This is a demo application for showcasing the new `azd init` flow!
 
 
 
