@@ -21,4 +21,12 @@ Dependencies:
 ## Notes and Issues
 - Port was auto configured to 8080 and had to switch to 5173 for vite
 - Keep getting Connection Refused by asyncpg?
-- Oryx workspace/ not found
+    - needed to update env variables in api.bicep to match what i'm looking for in my app
+- Oryx workspace/ not found in the container for the frontend per the log stream
+    - needed to add a start script in package.json to run `npm run dev -- --host`
+- where do I put API keys needed in the containers?
+    - .azure/ to store the keys keys
+    - main.parameters.json for referencing the keys
+    - add params for the keys in main.bicep
+    - pass params into api bicep module
+    - use in api bicep secrets
