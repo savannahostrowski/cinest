@@ -1,5 +1,4 @@
 import { createStyles, SegmentedControl, rem } from '@mantine/core';
-import { send } from 'process';
 
 const useStyles = createStyles((theme) => ({
   root: {
@@ -26,7 +25,11 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const GenreSelector = ({setGenreOnPage}) => {
+type GenreSelectorProps = {
+  setGenreOnPage: (genre: string) => void;
+};
+
+const GenreSelector: React.FC<GenreSelectorProps> = ({ setGenreOnPage }) => {
   const { classes } = useStyles();
   return (
     <SegmentedControl
@@ -40,4 +43,10 @@ const GenreSelector = ({setGenreOnPage}) => {
     />
   );
 }
+
 export default GenreSelector;
+
+
+
+
+

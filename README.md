@@ -2,21 +2,8 @@
 A movie suggestion engine, build with love and Azure
 
 ## notes
-### services
-- azure cosmos db for postgresql - to store movie data (movie names, genres, directors, main actors)
-- azure functions - back-end
-- azure static web apps - front end
-- openai - for suggestions (azure openai)
-
-```mermaid
-graph TD;
-    staticwebapps-->functions;
-    functions-->cosmos;
-    functions-->openai;
-    openai-->functions
-```
-
-
+- Port was auto configured to 8080 and had to switch to 5173 for vite
+- 
 
 ## Local development
 Dependencies:
@@ -25,5 +12,11 @@ Dependencies:
 - Python 3.11+
 - Node 18.16+
 
-- Run `npm run dev` to start the front-end
-- Run `docker-compose up -d` to run the API and database in containers for local development
+### Frontend
+1. Run `npm install` in `frontend/`
+1. Run `npm run dev` to start dev server
+
+### API
+1. Create venv or open in Dev Container
+1. Install deps via `pip install -r requirements.txt`
+1. In root of project (`/`), run `docker-compose up -d` to run the API and database in containers for local development

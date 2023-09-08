@@ -5,7 +5,6 @@ from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 import openai
 from database import create_database, get_database
-from requests import get
 
 MODEL = "gpt-4"
 OMDB_API_KEY = os.environ.get("OMDB_API_KEY")
