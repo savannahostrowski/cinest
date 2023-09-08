@@ -9,7 +9,6 @@ const SubmitPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-
   const fetchMovie = async () => {
     setLoading(true)
 
@@ -42,7 +41,7 @@ const SubmitPage = () => {
   if (loading) {
     return (
       <div>
-        <h2>Lights, camera, action!</h2>
+        <h2>Lights, camera, action! 🎥</h2>
         <Loader color="violet" />
       </div>
     )
@@ -50,9 +49,9 @@ const SubmitPage = () => {
 
   return (
     <>
-      <h1>Meet Cinest</h1>
+      <h1>I'm Cinest 🍿</h1>
       <h2>Your movie recommendation engine</h2>
-      <h3>Select a genre!</h3>
+      <h3>Start by selecting a genre!</h3>
       <GenreSelector setGenreOnPage={handleGenreChange} />
 
       <div>

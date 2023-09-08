@@ -1,10 +1,15 @@
 import json
 import os
+import aiohttp
 from fastapi import FastAPI, Depends
 from fastapi.middleware.cors import CORSMiddleware
 import openai
 from database import create_database, get_database
 from requests import get
+
+MODEL = "gpt-4"
+OMDB_API_KEY = os.environ.get("OMDB_API_KEY")
+OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 
 app = FastAPI()
 app.add_middleware(
@@ -16,16 +21,10 @@ app.add_middleware(
 )
 
 
-MODEL = "gpt-4"
-OMDB_API_KEY = os.environ.get("OMDB_API_KEY")
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
-
-
 @app.on_event("startup")
 async def startup():
     await create_database()
-   
-       
+
 
 @app.on_event("shutdown")
 async def shutdown():
@@ -50,8 +49,8 @@ async def random_movie(genre: str, conn=Depends(get_database)):
             },
             {
                 "role": "system",
-                "content": "Do not suggest a movie that has already been suggested. These movies have already been suggested: " + ", ".join(movieTitles),
-
+                "content": "Do not suggest a movie that has already been suggested. These movies have already been suggested: "
+                + ", ".join(movieTitles),
             },
             {
                 "role": "user",
@@ -59,12 +58,17 @@ async def random_movie(genre: str, conn=Depends(get_database)):
             },
         ],
     )
+        
     movie = json.loads(response.choices[0].message.content)["movie"]
-    # Search omdb database for the movie
-    omdbData = get(
-        f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&type=movie&t={movie}"
-    ).json()
 
+    # Search omdb database for the movie
+    async with aiohttp.ClientSession() as session:
+        async with session.get(
+            f"http://www.omdbapi.com/?apikey={OMDB_API_KEY}&type=movie&t={movie}"
+        ) as resp:
+            omdbData = await resp.json()
+
+    print(omdbData)
     # Store the movie in the database
     await conn.execute(
         "INSERT INTO movies (id, title, genre, year, plot, poster) VALUES ($1, $2, $3, $4, $5, $6)",
@@ -76,5 +80,10 @@ async def random_movie(genre: str, conn=Depends(get_database)):
         omdbData["Poster"],
     )
 
-
     return {"movie": omdbData}
+
+
+@app.get("/api/movie/{id}")
+async def movie(id: str, conn=Depends(get_database)):
+    movie = await conn.execute("SELECT * FROM movies WHERE id = $1", id)
+    return {"movie": movie}

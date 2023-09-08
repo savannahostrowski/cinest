@@ -1,4 +1,4 @@
-import { Button, Chip, Loader } from "@mantine/core";
+import { Loader } from "@mantine/core";
 import { useLocation, useNavigate } from "react-router-dom";
 import { MovieCard } from "./MovieCard";
 import { Movie } from "./types";
@@ -11,11 +11,13 @@ const MoviePage = () => {
     const navigate = useNavigate();
     const [loading, setLoading] = useState(false);
 
+    localStorage.setItem('lastGenre', genre);
+
     const fetchMovie = async () => {
         setLoading(true)
 
         try {
-            const response = await fetch(import.meta.env.VITE_API_URL + '/api/random_movie/' + genre)
+            const response = await fetch(import.meta.env.VITE_API_URL + '/api/random_movie/' +  movie.genre || genre)
             const data = await response.json()
             const m: Movie = {
                 id: data.movie.imdbID,
@@ -38,15 +40,14 @@ const MoviePage = () => {
 
     if (loading) {
         return (
+          <div>
+            <h2>Lights, camera, action! 🎥</h2>
             <Loader color="violet" />
+          </div>
         )
-    }
+      }
 
-    console.log(movie);
     return (
-        // Add a back button to the page
-        // Add a chip for each rating
-        // place in the top left
         <div style={{ position: 'relative' }}>
             <div>
                 <MovieCard poster={movie.poster} title={movie.title} plot={movie.plot} ratings={movie.rating} />
