@@ -1,5 +1,5 @@
 # cinest
-A movie suggestion engine, build with love and Azure
+A movie suggestion engine, built with love and Azure!
 ![](cinest.gif)
 
 ## Local development
