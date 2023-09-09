@@ -161,3 +161,6 @@ cython_debug/
 
 secrets.txt
 .azure
+*.key
+*.csr
+*.csr.swp
