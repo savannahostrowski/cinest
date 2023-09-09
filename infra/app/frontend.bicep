@@ -94,7 +94,7 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
             }
             {
               name: 'PORT'
-              value: '8080'
+              value: '5173'
             }
           ]
           resources: {
@@ -112,7 +112,7 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
 }
 
 resource managedCertificate 'Microsoft.App/managedEnvironments/managedCertificates@2022-11-01-preview' existing = {
-  name: 'cinest.xyz-cae-yuej-230909041906'
+  name: 'cinest.xyz-cae-yuej-230909055502'
   parent: containerAppsEnvironment
 }
 

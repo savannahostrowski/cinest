@@ -15,7 +15,7 @@ const MoviePage = () => {
         setLoading(true)
 
         try {
-            const response = await fetch('https://ca-api-yuej6fnjbkelo.wonderfulmeadow-4d43f400.eastus2.azurecontainerapps.io' + '/api/random_movie/' +  movie.genre || genre)
+            const response = await fetch('https://ca-api-yuej6fnjbkelo.yellowflower-d7b3fea3.eastus2.azurecontainerapps.io' + '/api/random_movie/' +  movie.genre || genre)
             const data = await response.json()
             const m: Movie = {
                 id: data.movie.imdbID,
