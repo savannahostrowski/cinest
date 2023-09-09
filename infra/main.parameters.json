@@ -1,24 +1,30 @@
 {
-    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-    "contentVersion": "1.0.0.0",
-    "parameters": {
-      "environmentName": {
-        "value": "${AZURE_ENV_NAME}"
-      },
-      "location": {
-        "value": "${AZURE_LOCATION}"
-      },
-      "databasePassword": {
-        "value": "$(secretOrRandomPassword ${AZURE_KEY_VAULT_NAME} databasePassword)"
-      },
-      "apiExists": {
-        "value": "${SERVICE_API_RESOURCE_EXISTS=false}"
-      },
-      "frontendExists": {
-        "value": "${SERVICE_FRONTEND_RESOURCE_EXISTS=false}"
-      },
-      "principalId": {
-        "value": "${AZURE_PRINCIPAL_ID}"
-      }
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "environmentName": {
+      "value": "${AZURE_ENV_NAME}"
+    },
+    "location": {
+      "value": "${AZURE_LOCATION}"
+    },
+    "databasePassword": {
+      "value": "$(secretOrRandomPassword ${AZURE_KEY_VAULT_NAME} databasePassword)"
+    },
+    "apiExists": {
+      "value": "${SERVICE_API_RESOURCE_EXISTS=false}"
+    },
+    "frontendExists": {
+      "value": "${SERVICE_FRONTEND_RESOURCE_EXISTS=false}"
+    },
+    "principalId": {
+      "value": "${AZURE_PRINCIPAL_ID}"
+    },
+    "openaiApiKey": {
+      "value": "${OPENAI_API_KEY}"
+    },
+    "omdbApiKey": {
+      "value": "${OMDB_API_KEY}"
     }
+  }
 }

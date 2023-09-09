@@ -17,6 +17,9 @@ param frontendExists bool
 @description('Id of the user or app to assign application roles')
 param principalId string
 
+param openaiApiKey string
+param omdbApiKey string
+
 // Tags that should be applied to all resources.
 // 
 // Note that 'azd-service-name' tags should be applied separately to service host resources.
@@ -114,6 +117,8 @@ module api './app/api.bicep' = {
     name: '${abbrs.appContainerApps}api-${resourceToken}'
     location: location
     tags: tags
+    openaiApiKey: openaiApiKey
+    omdbApiKey: omdbApiKey
     identityName: '${abbrs.managedIdentityUserAssignedIdentities}api-${resourceToken}'
     applicationInsightsName: monitoring.outputs.applicationInsightsName
     containerAppsEnvironmentName: appsEnv.outputs.name

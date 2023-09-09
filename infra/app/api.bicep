@@ -14,6 +14,9 @@ param databasePassword string
 param allowedOrigins array
 param exists bool
 
+param openaiApiKey string
+param omdbApiKey string
+
 resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: identityName
   location: location
@@ -96,19 +99,19 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
               value: applicationInsights.properties.ConnectionString
             }
             {
-              name: 'DB_HOST'
+              name: 'POSTGRES_HOST'
               value: databaseHost
             }
             {
-              name: 'DB_USER'
+              name: 'POSTGRES_USER'
               value: databaseUser
             }
             {
-              name: 'DB_NAME'
+              name: 'POSTGRES_DB'
               value: databaseName
             }
             {
-              name: 'DB_PASS'
+              name: 'POSTGRES_PASSWORD'
               secretRef: 'db-pass'
             }
             {
@@ -118,6 +121,14 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
             {
               name: 'PORT'
               value: '8000'
+            }
+            {
+              name: 'OPENAI_API_KEY'
+              value: openaiApiKey
+            }
+            {
+              name: 'OMDB_API_KEY'
+              value: omdbApiKey
             }
           ]
           resources: {

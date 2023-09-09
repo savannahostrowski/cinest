@@ -39,3 +39,6 @@ To try it out, checkout the `not-azdified` branch and run `azd init` in the dire
     - Add params for the keys in `main.bicep`
     - Pass params into `api.bicep` module
     - use in `api.bicep` secrets
+
+### Bonus: Configuring a custom domain!
+1. 
