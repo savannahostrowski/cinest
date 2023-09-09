@@ -39,6 +39,15 @@ To try it out, checkout the `not-azdified` branch and run `azd init` in the dire
     - Add params for the keys in `main.bicep`
     - Pass params into `api.bicep` module
     - use in `api.bicep` secrets
+1. Needed to update paths for API requests in front-end to use back-end container URL
 
 ### Bonus: Configuring a custom domain!
-1. 
+1. Go to frontend container app in portal
+1. Go to custom domains
+1. Click Add Custom Domain
+1. Select use managed certificate (preview)
+1. Enter domain name
+1. Add records to validate
+1. Once created, grab the name from the certificate used field
+1. Take that and update the frontend.bicep and add lines 114-117 with your name
+1. Reference in properties for container under `properties.configuration.ingress.customDomains` (lines 64-70) but replace with your own domain name
