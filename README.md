@@ -28,6 +28,7 @@ You will need API keys for [OMDb API](https://ombdapi.com/) (free!) and [OpenAI]
 This project was made Azure Developer CLI-compatible using the new `azd init` flow, which detects your local app stack and generates the right configuration to get the application up and running on Azure.
 
 To try it out, checkout the `not-azdified` branch and run `azd init` in the directory with the project and go through these steps:
+1. Enable buildpack support (needed for front-end)
 1. Postgres DB is not automatically detected so you need to add it manually during the init flow
 1. Port is configured to 8080 in the `frontend.bicep`, you will need to update to 5173 for Vite
 1. Error on backend container in log stream (connection refused by asyncpg) --> update env variables in `api.bicep` to match what I'm looking for in my app for the DB
