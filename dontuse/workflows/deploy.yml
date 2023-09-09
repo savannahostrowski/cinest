@@ -59,7 +59,7 @@ jobs:
             --tenant-id "$Env:AZURE_TENANT_ID"
         shell: pwsh
 
-      - name: Refresh the environment to grab values when re-provisioning is not needed
+      - name: Refresh the environment to grab values
         if: steps.filter.outputs.infra == 'false'
         run: azd env refresh --no-prompt
         env:

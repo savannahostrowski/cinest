@@ -24,12 +24,16 @@ You will need API keys for [OMDb API](https://ombdapi.com/) (free!) and [OpenAI]
 1. In root of project (`/`), run `docker-compose up` to run the API and database in containers for local development
 
 
-## Azure Developer CLI
+## Try out the new Azure Developer CLI easy `init` flow!
 This project was made Azure Developer CLI-compatible using the new `azd init` flow, which detects your local app stack and generates the right configuration to get the application up and running on Azure.
 
-To try it out, checkout the `not-azdified` branch and run `azd init` in the directory with the project and go through these steps:
-1. Enable buildpack support (needed for front-end)
+To try it out, checkout the `not-azdified` branch and run `azd init` in the directory with the project and walk through the wizard. This feature is experimental and in alpha stage. Currently this project still requires these manual configurations:
+
 1. Postgres DB is not automatically detected so you need to add it manually during the init flow
+
+After generation...
+1. Enable buildpack support to create the front-end container image via `azd config set alpha.buildpacks on`
+1. The standard `.gitignore` for Python automatically adds `lib/` --> needed to update the `.gitignore` to prevent it from ignoring the `infra/lib` directory.
 1. Port is configured to 8080 in the `frontend.bicep`, you will need to update to 5173 for Vite
 1. Error on backend container in log stream (connection refused by asyncpg) --> update env variables in `api.bicep` to match what I'm looking for in my app for the DB
 1. Error on fronend container in log stream (Oryx workspace/ not found in the container) --> add a start script in `package.json` to run `npm run dev -- --host` (this feels hacky and probably suboptimal??)
@@ -41,7 +45,11 @@ To try it out, checkout the `not-azdified` branch and run `azd init` in the dire
     - use in `api.bicep` secrets
 1. Needed to update paths for API requests in front-end to use back-end container URL
 
+### Bugs
+-  Issue after trying to run in CI/CD - 403 error: "does not have secrets get permission on key vault"; can no longer reprovision from local enviroment
+
 ### Bonus: Configuring a custom domain!
+azd doesn't handle this today but
 1. Go to frontend container app in portal
 1. Go to custom domains
 1. Click Add Custom Domain
