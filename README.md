@@ -13,7 +13,7 @@ Dependencies:
 
 ### Frontend
 1. Run `npm install` in `frontend/`
-1. Run `npm run dev` to start dev server
+1. Run `npm run dev` to start dev server on `localhost:5173`
 
 ### API
 You will need API keys for [OMDb API](https://ombdapi.com/) (free!) and [OpenAI](https://platform.openai.com/overview). Once you get these, store them in a `.env` file in the root of the project as `OMDB_API_KEY` and `OPENAI_API_KEY`.
@@ -26,8 +26,6 @@ This project was made Azure Developer CLI-compatible using the new `azd init` fl
 
 To try it out, checkout the `not-azdified` branch and run `azd init` in the directory with the project and walk through the wizard. This feature is experimental and in alpha stage. Currently this project still requires these manual configurations:
 
-1. Postgres DB is not automatically detected so you need to add it manually during the init flow
-
 After generation...
 1. Port is configured to 8080 in the `frontend.bicep`, you will need to update to 80 for Caddy.
 1. Need to reference the API keys for OMDb and OpenAI:
@@ -36,15 +34,3 @@ After generation...
     - Add params for the keys in `main.bicep`
     - Pass params into `api.bicep` module
     - use in `api.bicep` secrets
-
-### Bonus: Configuring a custom domain!
-azd doesn't handle this today but
-1. Go to frontend container app in portal
-1. Go to custom domains
-1. Click Add Custom Domain
-1. Select use managed certificate (preview)
-1. Enter domain name
-1. Add records to validate
-1. Once created, grab the name from the certificate used field
-1. Take that and update the frontend.bicep and add lines 114-117 with your name
-1. Reference in properties for container under `properties.configuration.ingress.customDomains` (lines 64-70) but replace with your own domain name
