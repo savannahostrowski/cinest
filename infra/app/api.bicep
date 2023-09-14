@@ -13,7 +13,6 @@ param databaseName string
 param databasePassword string
 param allowedOrigins array
 param exists bool
-
 param openaiApiKey string
 param omdbApiKey string
 
@@ -115,7 +114,7 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
               secretRef: 'db-pass'
             }
             {
-              name: 'DB_PORT'
+              name: 'POSTGRES_PORT'
               value: '5432'
             }
             {
