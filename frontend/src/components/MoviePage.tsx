@@ -4,6 +4,12 @@ import { MovieCard } from "./MovieCard";
 import { Movie } from "./types";
 import { useState } from "react";
 
+declare const API_BASE_URL: string | undefined;
+
+function getApiUrl(): string {
+  return typeof(API_BASE_URL) !== 'undefined' ? API_BASE_URL : 'http://localhost:8000'
+}
+
 const MoviePage = () => {
     const location = useLocation();
     const movie = location.state?.movie;
@@ -15,7 +21,7 @@ const MoviePage = () => {
         setLoading(true)
 
         try {
-            const response = await fetch(import.meta.env.VITE_API_URL + '/api/random_movie/' +  movie.genre || genre)
+            const response = await fetch(`${getApiUrl()}/api/random_movie/${genre}`)
             const data = await response.json()
             const m: Movie = {
                 id: data.movie.imdbID,
@@ -29,7 +35,7 @@ const MoviePage = () => {
                 cast: data.movie.Actors
             }
             setLoading(false);
-            navigate('/movie/' + m!.id, { state: { movie: m } })
+            navigate('/movie/' + m!.id, { state: { movie: m, genre: genre } })
         }
         catch (error) {
             console.log(error);

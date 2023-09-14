@@ -22,7 +22,7 @@ services:
       POSTGRES_DB: movies
       POSTGRES_HOST: db
     env_file:
-      - .env
+      - ./api/.env
     depends_on:
       - db
   pgadmin:

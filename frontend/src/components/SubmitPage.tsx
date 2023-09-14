@@ -4,6 +4,13 @@ import { Movie } from './types';
 import { Loader } from '@mantine/core';
 import { useNavigate } from 'react-router-dom';
 
+declare const API_BASE_URL: string | undefined;
+
+function getApiUrl(): string {
+  return typeof(API_BASE_URL) !== 'undefined' ? API_BASE_URL : 'http://localhost:8000'
+}
+
+
 const SubmitPage = () => {
   const [genre, setGenre] = useState('Action');
   const [loading, setLoading] = useState(false);
@@ -13,7 +20,7 @@ const SubmitPage = () => {
     setLoading(true)
 
     try {
-      const response = await fetch(import.meta.env.VITE_API_URL + '/api/random_movie/' + genre)
+      const response = await fetch(`${getApiUrl()}/api/random_movie/${genre}`)
       const data = await response.json()
       const m: Movie = {
         id: data.movie.imdbID,
@@ -27,7 +34,7 @@ const SubmitPage = () => {
         cast: data.movie.Actors
       }
       setLoading(false);
-      navigate('/movie/' + m!.id, { state: { movie: m } })
+      navigate('/movie/' + m!.id, { state: { movie: m, genre: genre } })
     }
     catch (error) {
       console.log(error);
