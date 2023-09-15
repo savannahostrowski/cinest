@@ -40,14 +40,7 @@ jobs:
               --tenant-id "$Env:AZURE_TENANT_ID"
           shell: pwsh
   
-        - name: Refresh the environment to grab values when re-provisioning is not needed
-          run: azd env refresh --no-prompt
-          env:
-            AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
-            AZURE_LOCATION: ${{ vars.AZURE_LOCATION }}
-            AZURE_SUBSCRIPTION_ID: ${{ vars.AZURE_SUBSCRIPTION_ID }}
-  
-        - name: Provision Infrastructure, if infra/ has changed
+        - name: Provision Infrastructure
           run: azd provision --no-prompt
           env:
             AZURE_ENV_NAME: ${{ vars.AZURE_ENV_NAME }}
