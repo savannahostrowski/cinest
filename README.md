@@ -26,10 +26,7 @@ This project was made Azure Developer CLI-compatible using the new `azd init` fl
 
 To try it out, checkout the `not-azdified` branch and run `azd init` in the directory with the project and walk through the wizard. This feature is experimental and in alpha stage. Currently this project still requires these manual configurations:
 
-1. Postgres DB is not automatically detected so you need to add it manually during the init flow
-
-After generation...
-1. Port is configured to 8080 in the `frontend.bicep`, you will need to update to 80 for Caddy.
+1. Update `DB_` env variables in `api.bicep` to match what's used in the docker-compose file
 1. Need to reference the API keys for OMDb and OpenAI:
     - Copy the contents of your `.env` into the `.azure/<env name>/.env` file
     - Add them to `main.parameters.json` 
