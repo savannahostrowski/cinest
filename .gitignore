@@ -14,7 +14,7 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
+venv/lib/
 lib64/
 parts/
 sdist/
@@ -161,3 +161,6 @@ cython_debug/
 
 secrets.txt
 .azure
+*.key
+*.csr
+*.csr.swp
