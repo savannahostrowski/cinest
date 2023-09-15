@@ -17,13 +17,12 @@ services:
     ports:
       - "8000:8000"
     environment:
-      DATABASE_URL: postgresql://postgres:postgres@db:5432/movies
       POSTGRES_PASSWORD: postgres
       POSTGRES_USER: postgres
       POSTGRES_DB: movies
       POSTGRES_HOST: db
     env_file:
-      - .env
+      - ./api/.env
     depends_on:
       - db
   pgadmin:

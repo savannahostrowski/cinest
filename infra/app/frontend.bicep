@@ -59,7 +59,7 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
     configuration: {
       ingress:  {
         external: true
-        targetPort:5173
+        targetPort: 80
         transport: 'auto'
         customDomains: [
           {
@@ -94,7 +94,7 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
             }
             {
               name: 'PORT'
-              value: '5173'
+              value: '80'
             }
           ]
           resources: {
