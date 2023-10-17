@@ -13,8 +13,16 @@ param databaseName string
 param databasePassword string
 param allowedOrigins array
 param exists bool
-param openaiApiKey string
-param omdbApiKey string
+@secure()
+param appSettings object
+
+var appSettingsArray = array(appSettings.settings)
+var secrets = map(filter(appSettingsArray, i => i.?secret != null), i => {
+  name: i.name
+  value: i.value
+  secretRef: i.?secretRef ?? take(replace(replace(toLower(i.name), '_', '-'), '.', '-'), 32)
+})
+var env = filter(appSettingsArray, i => i.?secret == null)
 
 resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: identityName
@@ -80,19 +88,23 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
           identity: identity.id
         }
       ]
-      secrets: [
+      secrets: union([
         {
           name: 'db-pass'
           value: databasePassword
         }
-      ]
+      ],
+      map(secrets, secret => {
+        name: secret.secretRef
+        value: secret.value
+      }))
     }
     template: {
       containers: [
         {
           image: fetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
           name: 'main'
-          env: [
+          env: union([
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
               value: applicationInsights.properties.ConnectionString
@@ -121,15 +133,12 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
               name: 'PORT'
               value: '8000'
             }
-            {
-              name: 'OPENAI_API_KEY'
-              value: openaiApiKey
-            }
-            {
-              name: 'OMDB_API_KEY'
-              value: omdbApiKey
-            }
-          ]
+          ],
+          env,
+          map(secrets, secret => {
+            name: secret.name
+            secretRef: secret.secretRef
+          }))
           resources: {
             cpu: json('1.0')
             memory: '2.0Gi'

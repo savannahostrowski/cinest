@@ -17,8 +17,8 @@ param frontendExists bool
 @description('Id of the user or app to assign application roles')
 param principalId string
 
-param openaiApiKey string
-param omdbApiKey string
+@secure()
+param apiSettings object
 
 // Tags that should be applied to all resources.
 // 
@@ -117,8 +117,7 @@ module api './app/api.bicep' = {
     name: '${abbrs.appContainerApps}api-${resourceToken}'
     location: location
     tags: tags
-    openaiApiKey: openaiApiKey
-    omdbApiKey: omdbApiKey
+    appSettings: apiSettings
     identityName: '${abbrs.managedIdentityUserAssignedIdentities}api-${resourceToken}'
     applicationInsightsName: monitoring.outputs.applicationInsightsName
     containerAppsEnvironmentName: appsEnv.outputs.name

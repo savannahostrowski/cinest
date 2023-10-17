@@ -20,11 +20,21 @@
     "principalId": {
       "value": "${AZURE_PRINCIPAL_ID}"
     },
-    "openaiApiKey": {
-      "value": "${OPENAI_API_KEY}"
-    },
-    "omdbApiKey": {
-      "value": "${OMDB_API_KEY}"
+    "apiSettings": {
+      "value": {
+        "settings": [
+          {
+            "name": "openaiApiKey",
+            "value": "${OPENAI_API_KEY}",
+            "secret": true
+          },
+          {
+            "name": "omdbApiKey",
+            "value": "${OMDB_API_KEY}",
+            "secret": true
+          }
+        ]
+      }
     }
   }
 }
