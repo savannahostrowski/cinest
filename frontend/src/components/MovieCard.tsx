@@ -11,7 +11,7 @@ import {
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
-        maxWidth: '35vw',
+        maxWidth: '442px',
         marginBottom: theme.spacing.md,
     },
     section: {
