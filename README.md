@@ -24,13 +24,6 @@ You will need API keys for [OMDb API](https://ombdapi.com/) (free!) and [OpenAI]
 ## Try out the new Azure Developer CLI easy `init` flow!
 This project was made Azure Developer CLI-compatible using the new `azd init` flow, which detects your local app stack and generates the right configuration to get the application up and running on Azure.
 
-To try it out, checkout the `not-azdified` branch and run `azd init` in the directory with the project and walk through the wizard. This feature is experimental and in alpha stage. Currently this project still requires these manual configurations:
+To try it out, checkout the `not-azdified` branch and run `azd init` in the directory with the project and walk through the wizard.
 
-After generation...
-1. Port is configured to 8080 in the `frontend.bicep`, you will need to update to 80 for Caddy.
-1. Need to reference the API keys for OMDb and OpenAI:
-    - Copy the contents of your `.env` into the `.azure/<env name>/.env` file
-    - Add them to `main.parameters.json` 
-    - Add params for the keys in `main.bicep`
-    - Pass params into `api.bicep` module
-    - use in `api.bicep` secrets
+To configure env vars after generation, you should add your API keys to the `.azure/<env name>/.env` file and then add them to the `main.parameters.json` file. 
