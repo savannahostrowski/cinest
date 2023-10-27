@@ -11,8 +11,8 @@ import {
 const useStyles = createStyles((theme) => ({
     card: {
         backgroundColor: theme.colorScheme === 'dark' ? theme.colors.dark[7] : theme.white,
-        maxWidth: '35vw',
         marginBottom: theme.spacing.md,
+        maxWidth: '442px',
     },
     section: {
         borderBottom: `${rem(1)} solid ${theme.colorScheme === 'dark' ? theme.colors.dark[4] : theme.colors.gray[3]
