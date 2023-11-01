@@ -61,13 +61,6 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
         external: true
         targetPort: 80
         transport: 'auto'
-        customDomains: [
-          {
-            name: 'cinest.xyz'
-            certificateId: managedCertificate.id
-            bindingType: 'SniEnabled'
-          }
-        ]
       }
       registries: [
         {
@@ -109,11 +102,6 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
       }
     }
   }
-}
-
-resource managedCertificate 'Microsoft.App/managedEnvironments/managedCertificates@2022-11-01-preview' existing = {
-  name: 'cinest.xyz-cae-yuej-230909055502'
-  parent: containerAppsEnvironment
 }
 
 output defaultDomain string = containerAppsEnvironment.properties.defaultDomain
