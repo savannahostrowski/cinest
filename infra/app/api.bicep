@@ -14,15 +14,18 @@ param databasePassword string
 param allowedOrigins array
 param exists bool
 @secure()
-param appSettings object
+param appDefinition object
 
-var appSettingsArray = array(appSettings.settings)
+var appSettingsArray = filter(array(appDefinition.settings), i => i.name != '')
 var secrets = map(filter(appSettingsArray, i => i.?secret != null), i => {
   name: i.name
   value: i.value
   secretRef: i.?secretRef ?? take(replace(replace(toLower(i.name), '_', '-'), '.', '-'), 32)
 })
-var env = filter(appSettingsArray, i => i.?secret == null)
+var env = map(filter(appSettingsArray, i => i.?secret == null), i => {
+  name: i.name
+  value: i.value
+})
 
 resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: identityName
@@ -52,7 +55,7 @@ resource acrPullRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   }
 }
 
-module fetchLatestImage '../lib/fetch-container-image.bicep' = {
+module fetchLatestImage '../modules/fetch-container-image.bicep' = {
   name: '${name}-fetch-image'
   params: {
     exists: exists

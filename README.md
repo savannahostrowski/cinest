@@ -27,3 +27,5 @@ This project was made Azure Developer CLI-compatible using the new `azd init` fl
 To try it out, checkout the `not-azdified` branch and run `azd init` in the directory with the project and walk through the wizard.
 
 To configure env vars after generation, you should add your API keys to the `.azure/<env name>/.env` file and then add them to the `main.parameters.json` file. 
+
+Then run `azd up` for deployment.

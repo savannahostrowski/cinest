@@ -12,13 +12,14 @@ param location string
 @secure()
 param databasePassword string
 param apiExists bool
+@secure()
+param apiDefinition object
 param frontendExists bool
+@secure()
+param frontendDefinition object
 
 @description('Id of the user or app to assign application roles')
 param principalId string
-
-@secure()
-param apiSettings object
 
 // Tags that should be applied to all resources.
 // 
@@ -117,12 +118,12 @@ module api './app/api.bicep' = {
     name: '${abbrs.appContainerApps}api-${resourceToken}'
     location: location
     tags: tags
-    appSettings: apiSettings
     identityName: '${abbrs.managedIdentityUserAssignedIdentities}api-${resourceToken}'
     applicationInsightsName: monitoring.outputs.applicationInsightsName
     containerAppsEnvironmentName: appsEnv.outputs.name
     containerRegistryName: registry.outputs.name
     exists: apiExists
+    appDefinition: apiDefinition
     databaseName: postgresDb.outputs.databaseName
     databaseHost: postgresDb.outputs.databaseHost
     databaseUser: postgresDb.outputs.databaseUser
@@ -145,6 +146,7 @@ module frontend './app/frontend.bicep' = {
     containerAppsEnvironmentName: appsEnv.outputs.name
     containerRegistryName: registry.outputs.name
     exists: frontendExists
+    appDefinition: frontendDefinition
     apiUrls: [
       api.outputs.uri
     ]

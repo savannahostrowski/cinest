@@ -8,6 +8,19 @@ param containerAppsEnvironmentName string
 param applicationInsightsName string
 param apiUrls array
 param exists bool
+@secure()
+param appDefinition object
+
+var appSettingsArray = filter(array(appDefinition.settings), i => i.name != '')
+var secrets = map(filter(appSettingsArray, i => i.?secret != null), i => {
+  name: i.name
+  value: i.value
+  secretRef: i.?secretRef ?? take(replace(replace(toLower(i.name), '_', '-'), '.', '-'), 32)
+})
+var env = map(filter(appSettingsArray, i => i.?secret == null), i => {
+  name: i.name
+  value: i.value
+})
 
 resource identity 'Microsoft.ManagedIdentity/userAssignedIdentities@2023-01-31' = {
   name: identityName
@@ -37,7 +50,7 @@ resource acrPullRole 'Microsoft.Authorization/roleAssignments@2022-04-01' = {
   }
 }
 
-module fetchLatestImage '../lib/fetch-container-image.bicep' = {
+module fetchLatestImage '../modules/fetch-container-image.bicep' = {
   name: '${name}-fetch-image'
   params: {
     exists: exists
@@ -61,13 +74,6 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
         external: true
         targetPort: 80
         transport: 'auto'
-        customDomains: [
-          {
-            name: 'cinest.xyz'
-            certificateId: managedCertificate.id
-            bindingType: 'SniEnabled'
-          }
-        ]
       }
       registries: [
         {
@@ -75,15 +81,19 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
           identity: identity.id
         }
       ]
-      secrets: [
-      ]
+      secrets: union([
+      ],
+      map(secrets, secret => {
+        name: secret.secretRef
+        value: secret.value
+      }))
     }
     template: {
       containers: [
         {
           image: fetchLatestImage.outputs.?containers[?0].?image ?? 'mcr.microsoft.com/azuredocs/containerapps-helloworld:latest'
           name: 'main'
-          env: [
+          env: union([
             {
               name: 'APPLICATIONINSIGHTS_CONNECTION_STRING'
               value: applicationInsights.properties.ConnectionString
@@ -96,7 +106,12 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
               name: 'PORT'
               value: '80'
             }
-          ]
+          ],
+          env,
+          map(secrets, secret => {
+            name: secret.name
+            secretRef: secret.secretRef
+          }))
           resources: {
             cpu: json('1.0')
             memory: '2.0Gi'
@@ -109,11 +124,6 @@ resource app 'Microsoft.App/containerApps@2023-04-01-preview' = {
       }
     }
   }
-}
-
-resource managedCertificate 'Microsoft.App/managedEnvironments/managedCertificates@2022-11-01-preview' existing = {
-  name: 'cinest.xyz-cae-yuej-230909055502'
-  parent: containerAppsEnvironment
 }
 
 output defaultDomain string = containerAppsEnvironment.properties.defaultDomain
