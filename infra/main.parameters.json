@@ -24,12 +24,12 @@
       "value": {
         "settings": [
           {
-            "name": "openaiApiKey",
+            "name": "OPENAI_API_KEY",
             "value": "${OPENAI_API_KEY}",
             "secret": true
           },
           {
-            "name": "omdbApiKey",
+            "name": "OMDB_API_KEY",
             "value": "${OMDB_API_KEY}",
             "secret": true
           }
