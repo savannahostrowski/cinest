@@ -16,7 +16,7 @@ Dependencies:
 1. Run `npm run dev` to start dev server on `localhost:5173`
 
 ### API
-You will need API keys for [OMDb API](https://ombdapi.com/) (free!) and [OpenAI](https://platform.openai.com/overview). Once you get these, store them in a `.env` file in the root of the project as `OMDB_API_KEY` and `OPENAI_API_KEY`.
+You will need API keys for [OMDb API](https://www.omdbapi.com/apikey.aspx) (free!) and [OpenAI](https://platform.openai.com/overview). Once you get these, store them in a `.env` file in the root of the project as `OMDB_API_KEY` and `OPENAI_API_KEY`.
 1. Create venv or open in Dev Container
 1. Install deps via `pip install -r requirements.txt`
 1. In root of project (`/`), run `docker-compose up` to run the API and database in containers for local development
